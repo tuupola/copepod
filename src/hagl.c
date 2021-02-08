@@ -266,6 +266,9 @@ void hagl_fill_rectangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, color_t
     x1 = min(x1, clip_window.x1);
     y1 = min(y1, clip_window.y1);
 
+#ifdef HAGL_HAS_HAL_FILL_RECTANGLE
+    hagl_hal_fill_rectangle(x0, y0, x1, y1, color);
+#else
     uint16_t width = x1 - x0 + 1;
     uint16_t height = y1 - y0 + 1;
 
@@ -275,8 +278,11 @@ void hagl_fill_rectangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, color_t
         hagl_hal_hline(x0, y0 + i, width, color);
 #else
         hagl_draw_hline(x0, y0 + i, width, color);
-#endif
+#endif /* HAGL_HAS_HAL_HLINE */
     }
+
+
+#endif /* HAGL_HAS_HAL_HLINE */
 }
 
 uint8_t hagl_get_glyph(wchar_t code, color_t color, bitmap_t *bitmap, const uint8_t *font)
